@@ -88,3 +88,5 @@ To pass this course, students must meet the following requirements:
 [quiz study guides]: StudyGuides.md
 [regular expressions]: Lessons/RegularExpressions.md
 [strings & random numbers]: Lessons/RandomStrings.md
+
+If you want to run my dracula program, need to copy/paste the dracula file from gutenberg: https://www.gutenberg.org/cache/epub/345/pg345.txt
