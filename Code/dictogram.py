@@ -10,6 +10,7 @@ class Dictogram(dict):
     def __init__(self, word_list=None):
         """Initialize this histogram as a new dict and count given words."""
         super(Dictogram, self).__init__()  # Initialize this as a new dict
+        # the dict will have unique words as the key and word count as the value
         # Add properties to track useful word counts for this histogram
         self.types = 0  # Count of distinct word types in this histogram
         self.tokens = 0  # Total count of all word tokens in this histogram
@@ -21,15 +22,42 @@ class Dictogram(dict):
     def add_count(self, word, count=1):
         """Increase frequency count of given word by given count amount."""
         # TODO: Increase word frequency by count
+         # if word exists, increase its count
+        if word in self:
+            self[word] += count
+        else:
+            # if word doesn't exist, add it with initial count
+            self[word] = count
+            self.types += 1
+        # always increase tokens, need total words to create ratio + probability
+        self.tokens += count
+
 
     def frequency(self, word):
         """Return frequency count of given word, or 0 if word is not found."""
         # TODO: Retrieve word frequency count
+        # use word as key to acces value (count)
+        # dictionary get method returns default 0 if word not found
+        return self.get(word, 0)
+
 
     def sample(self):
         """Return a word from this histogram, randomly sampled by weighting
         each word's probability of being chosen by its observed frequency."""
         # TODO: Randomly choose a word based on its frequency in this histogram
+        # get total number of words to use in range
+        total_tokens = self.tokens
+        random_value = random.randint(1, total_tokens)
+        cumulative = 0
+        # dict method .items() returns key/value pairs as tuples of the 2 items
+        for word, count in self.items():
+        # cumulative now = count in the tuple
+            cumulative += count
+        # if cumulative is larger than random_value, return the word
+        # more frequent words get larger ranges
+            if random_value <= cumulative:
+                return word
+
 
 
 def print_histogram(word_list):
