@@ -145,9 +145,6 @@ class LinkedList:
         if current.next is None:  # If we're deleting the tail
             self.tail = previous
 
-        # update length
-        self.tokens -= 1
-
 
 
 def test_linked_list():
