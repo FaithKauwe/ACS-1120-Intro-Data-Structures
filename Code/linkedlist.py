@@ -2,7 +2,7 @@
 
 
 class Node(object):
-
+# create Node objects, each one holds data (the values) and a reference (pointer to the next node)
     def __init__(self, data):
         """Initialize this node with the given data."""
         self.data = data
@@ -52,36 +52,102 @@ class LinkedList:
 
     def length(self):
         """Return the length of this linked list by traversing its nodes.
-        TODO: Running time: O(n) Why and under what conditions?"""
-        # TODO: Loop through all nodes and count one for each
+       Running time: O(n) where n is the number of nodes in the linked list
+    because we must traverse through each node once to count it."""
+        count = 0
+        current = self.head
+        while current is not None:
+            count += 1
+            current = current.next
+        return count
+
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Create new node to hold given item
-        # TODO: If self.is_empty() == True set the head and the tail to the new node
-        # TODO: Else append node after tail
+         Running time: O(1) maintain a tail pointer will always be O(1) as long as the tail node is tracked
+        and appends only happen at the end of the list"""
+        new_node = Node(item)
+    
+        if self.is_empty():
+            # list is empty, set both head and tail to new node
+            self.head = new_node
+            self.tail = new_node
+        else:
+            # add new node after tail
+            self.tail.next = new_node
+            self.tail = new_node
+
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
-        # TODO: Create new node to hold given item
-        # TODO: Prepend node before head, if it exists
+        Running time: O(1), maintain a head pointer will always be O(1) as long as the head node is tracked
+        and appends only happen at the beginning of the list"""
+        new_node = Node(item)
+    
+        if self.is_empty():
+            # List is empty, set both head and tail to new node
+            self.head = new_node
+            self.tail = new_node
+        else:
+            # Add new node before head
+            new_node.next = self.head
+            self.head = new_node
+
 
     def find(self, matcher):
         """Return an item from this linked list if it is present.
-        TODO: Best case running time: O(???) Why and under what conditions?
-        TODO: Worst case running time: O(???) Why and under what conditions?"""
-        # TODO: Loop through all nodes to find item, if present return True otherwise False
+        Running time: 
+    Best case: O(1) when the item is at the head
+    Worst case: O(n) when:
+    1. Item is at the tail
+    2. Item isn't in the list at all
+    3. We have to check every node to find it"""
+
+        current = self.head       # O(1) - start at head
+    
+        while current is not None:  # Loop through all nodes
+            if current.data == matcher:  # O(1) - check if current node matches
+                return True
+            current = current.next      # O(1) - move to next node
+        
+        return False  # Item not found after checking all nodes
+
+
 
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
-        TODO: Best case running time: O(???) Why and under what conditions?
-        TODO: Worst case running time: O(???) Why and under what conditions?"""
-        # TODO: Loop through all nodes to find one whose data matches given item
-        # TODO: Update previous node to skip around node with matching data
-        # TODO: Otherwise raise error to tell user that delete has failed
-        # Hint: raise ValueError('Item not found: {}'.format(item))
+        Running time: O(n) because we might need to traverse the whole list.
+    Under what conditions: Best case O(1) if item is at head, worst case O(n) 
+    if item is at tail or not found.
+"""
+        current = self.head
+        previous = None
+        found = False
+
+        # Find the node to delete
+        while current is not None:
+            if current.data == item:
+                found = True
+                break
+            previous = current
+            current = current.next
+
+        if not found:
+            raise ValueError('Item not found: {}'.format(item))
+
+        # Update head/tail if needed
+        if previous is None:  # Deleting head
+            self.head = current.next
+        else:  # Deleting non-head node
+            previous.next = current.next
+
+        # Update tail if needed
+        if current.next is None:  # If we're deleting the tail
+            self.tail = previous
+
+        # update length
+        self.tokens -= 1
+
 
 
 def test_linked_list():
