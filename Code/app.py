@@ -1,40 +1,22 @@
 """Main script, uses other modules to generate sentences."""
 from flask import Flask
 from markov_chain import MarkovChain
+from text_cleaner import clean_corpus
 
 app = Flask(__name__)
 
-# Load the corpus
-def load_corpus(file_path):
-    """Load corpus from file and return it as a list of words."""
-    try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            text = file.read().replace('\n', ' ')
-            # Basic cleaning while preserving sentence structure
-            for char in ',":;()[]{}':
-                text = text.replace(char, ' ')
-            # Split into words and remove empty strings
-            words = [word for word in text.split() if word]
-        return words
-    except UnicodeDecodeError:
-        # Try with different encoding if UTF-8 fails
-        with open(file_path, 'r', encoding='latin-1') as file:
-            text = file.read().replace('\n', ' ')
-            for char in ',":;()[]{}':
-                text = text.replace(char, ' ')
-            words = [word for word in text.split() if word]
-        return words
 
-# try to load the Dracula corpus, or use a backup text if it fails
+# Try to load the corpus, or use a backup text if it fails
 try:
-    corpus_path = 'data/dracula.txt'  
-    word_list = load_corpus(corpus_path)
+    corpus_path = 'data/dracula.txt'
+    word_list = clean_corpus(corpus_path)
     print(f"Loaded {len(word_list)} words from {corpus_path}")
 except Exception as e:
     print(f"Error loading corpus: {e}")
-    # use a backup text if the corpus loading fails
+    # Use a backup text if the corpus loading fails
     fish_text = 'one fish two fish red fish blue fish'
     word_list = fish_text.split()
+
 
 # initialize the Markov chain
 markov_chain = MarkovChain(word_list)
